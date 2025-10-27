@@ -60,9 +60,8 @@ with col1:
         
         if uploaded_file:
             original_image = Image.open(uploaded_file)
-            # --- FIX 1 ---
-            # Replaced use_container_width=True with width=None
-            st.image(original_image, caption="Original Uploaded Image", width=None)
+            # FIX 1: Removed the outdated 'use_container_width' argument
+            st.image(original_image, caption="Original Uploaded Image")
 
 # --- Detection Results Column ---
 with col2:
@@ -94,9 +93,8 @@ with col2:
                 processed_image = cv2.addWeighted(overlay, 0.5, img_cv, 0.5, 0)
                 processed_image_rgb = cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB)
                 
-                # --- FIX 2 ---
-                # Replaced use_container_width=True with width=None
-                st.image(processed_image_rgb, caption="Processed Image with Detections", width=None)
+                # FIX 2: Removed the outdated 'use_container_width' argument
+                st.image(processed_image_rgb, caption="Processed Image with Detections")
                 
                 st.subheader("Detection Analysis")
                 if detections:
@@ -137,7 +135,8 @@ class_performance_data = {
 }
 df_perf = pd.DataFrame(class_performance_data)
 
-chart = alt.Chart(df_perf).mark_.bar().encode(
+# FIX 3: Corrected mark_.bar() to mark_bar()
+chart = alt.Chart(df_perf).mark_bar().encode(
     x=alt.X('mAP@0.5 (%):Q', title='Mean Average Precision (mAP@0.5)', scale=alt.Scale(domain=[0, 100])),
     y=alt.Y('Class:N', sort=None, title='Disease / Landmark Class'),
     tooltip=['Class', 'mAP@0.5 (%)']
@@ -150,7 +149,7 @@ text = chart.mark_text(
     baseline='middle',
     dx=3
 ).encode(
-    text=alt.Text('mAP@0.5 (%):Q', format='.1f')
+    text=alt.Text('mAP@0.S (%):Q', format='.1f')
 )
 
 st.altair_chart((chart + text), use_container_width=True)
