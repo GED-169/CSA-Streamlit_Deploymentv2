@@ -60,7 +60,9 @@ with col1:
         
         if uploaded_file:
             original_image = Image.open(uploaded_file)
-            st.image(original_image, caption="Original Uploaded Image", use_container_width=True)
+            # --- FIX 1 ---
+            # Replaced use_container_width=True with width=None
+            st.image(original_image, caption="Original Uploaded Image", width=None)
 
 # --- Detection Results Column ---
 with col2:
@@ -92,7 +94,9 @@ with col2:
                 processed_image = cv2.addWeighted(overlay, 0.5, img_cv, 0.5, 0)
                 processed_image_rgb = cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB)
                 
-                st.image(processed_image_rgb, caption="Processed Image with Detections", use_container_width=True)
+                # --- FIX 2 ---
+                # Replaced use_container_width=True with width=None
+                st.image(processed_image_rgb, caption="Processed Image with Detections", width=None)
                 
                 st.subheader("Detection Analysis")
                 if detections:
@@ -133,7 +137,7 @@ class_performance_data = {
 }
 df_perf = pd.DataFrame(class_performance_data)
 
-chart = alt.Chart(df_perf).mark_bar().encode(
+chart = alt.Chart(df_perf).mark_.bar().encode(
     x=alt.X('mAP@0.5 (%):Q', title='Mean Average Precision (mAP@0.5)', scale=alt.Scale(domain=[0, 100])),
     y=alt.Y('Class:N', sort=None, title='Disease / Landmark Class'),
     tooltip=['Class', 'mAP@0.5 (%)']
